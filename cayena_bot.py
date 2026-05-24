@@ -5,6 +5,7 @@ from google.oauth2 import service_account
 from pymongo import MongoClient
 from datetime import datetime
 import streamlit as st
+import json
 
 # ==================== 1. CONFIGURACIÓN DESDE SECRETS ====================
 # En la nube de Streamlit jalamos todo de st.secrets para máxima seguridad
@@ -12,11 +13,12 @@ TOKEN_TELEGRAM = st.secrets["TOKEN_TELEGRAM"]
 PROJECT_ID = st.secrets["PROJECT_ID"]
 MONGO_URI = st.secrets["MONGO_URI"]
 
-# Autenticación de Google Cloud usando el diccionario cargado en Secrets
-creds_dict = st.secrets["GOOGLE_CREDENTIALS"]
+# Leemos la llave de Google como un string de texto y lo transformamos a diccionario
+json_string = st.secrets["GOOGLE_JSON_STRING"]
+creds_dict = json.loads(json_string)
 credentials = service_account.Credentials.from_service_account_info(creds_dict)
 
-# Configuración básica en la interfaz de Streamlit para saber que el contenedor corre bien
+# Configuración básica en la interfaz de Streamlit para validar que el contenedor corre bien
 st.title("🚀 Panel del Bot de Cayena")
 st.write("El bot de Telegram está corriendo en segundo plano...")
 
